@@ -1,4 +1,12 @@
-import { Box, Checkbox, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
@@ -6,6 +14,8 @@ import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import StarIcon from "@mui/icons-material/Star";
 import { getAllTodos } from "./api/api";
 import { TodoState } from "./types/types";
+import AddIcon from "@mui/icons-material/Add";
+import AddTodo from "./AddTodo";
 
 const TodoList: React.FC = () => {
   const [datas, setDatas] = useState<TodoState[]>([]);
@@ -20,12 +30,20 @@ const TodoList: React.FC = () => {
   }, []);
 
   return (
-    <Box sx={{ width: "100%", height: "100vh" }}>
-      <Box p={3}>
+    <Box
+      sx={{
+        p: 3,
+        width: "100%",
+        justifyContent: "space-between",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <Box>
         <Typography fontSize={22} align="left" pb={2}>
           Tasks
         </Typography>
-        <Box sx={{ overflowY: "auto", maxHeight: "80vh" }}>
+        <Box sx={{ overflowY: "auto", maxHeight: "75vh" }}>
           {datas.map((data, index) => (
             <Box key={data.id} sx={{ backgroundColor: "lightgray", mb: 1 }}>
               <Box
@@ -65,6 +83,7 @@ const TodoList: React.FC = () => {
           ))}
         </Box>
       </Box>
+      <AddTodo fetchTodos={fetchTodos} />
     </Box>
   );
 };
