@@ -18,3 +18,18 @@ export const fetchAddTodo = async (todo: TodoState): Promise<TodoState> => {
   const newTodo = res.json();
   return newTodo;
 };
+
+export const updateTodo = async (
+  id: string,
+  todo: TodoState
+): Promise<TodoState> => {
+  const res = await fetch(`http://localhost:3001/todo/${id}`, {
+    method: "put",
+    headers: {
+      "Content-Type": "application/json", //
+    },
+    body: JSON.stringify(todo),
+  });
+  const newTodo = res.json();
+  return newTodo;
+};
