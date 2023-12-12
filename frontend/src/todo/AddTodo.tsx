@@ -20,13 +20,15 @@ import { addTodo } from "./api/api";
 import { format } from "date-fns";
 import dayjs from "dayjs";
 import CloseIcon from "@mui/icons-material/Close";
+import { TodoState } from "./types/types";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
 });
 
 interface AddTodoProps {
-  fetchTodos: () => void;
+  todos: TodoState[];
+  setTodos: React.Dispatch<React.SetStateAction<TodoState[]>>;
 }
 
 const AddTodo: React.FC<AddTodoProps> = (props) => {
@@ -60,7 +62,7 @@ const AddTodo: React.FC<AddTodoProps> = (props) => {
         createdAt: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
       };
       await addTodo(todo);
-      await props.fetchTodos();
+      props.setTodos([...props.todos, todo]);
       handleClose();
     },
   });
