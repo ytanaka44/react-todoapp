@@ -1,4 +1,11 @@
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  TextField,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
@@ -12,6 +19,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { addTodo } from "./api/api";
 import { format } from "date-fns";
 import dayjs from "dayjs";
+import CloseIcon from "@mui/icons-material/Close";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
@@ -35,7 +43,7 @@ const AddTodo: React.FC<AddTodoProps> = (props) => {
 
   const formik = useFormik({
     initialValues: {
-      id: uuidv4(),
+      id: "",
       title: "",
       description: "",
       done: false,
@@ -45,12 +53,15 @@ const AddTodo: React.FC<AddTodoProps> = (props) => {
     },
     validationSchema,
     onSubmit: async (state) => {
+      const newId = uuidv4();
       const todo = {
         ...state,
+        id: newId,
         createdAt: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
       };
       await addTodo(todo);
       await props.fetchTodos();
+      handleClose();
     },
   });
 
@@ -71,24 +82,38 @@ const AddTodo: React.FC<AddTodoProps> = (props) => {
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add Todo</DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
         <DialogContent>
           <form noValidate onSubmit={formik.handleSubmit}>
             <CustomTextField
               id="title"
               name="title"
               label="title*"
-              variant="outlined"
+              variant="standard"
               value={formik.values.title}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={!!(formik.touched.title && formik.errors.title)}
               helperText={(formik.touched.title && formik.errors.title) || ""}
             />
-            <CustomTextField
+            <TextField
               id="description"
-              name="description"
               label="description"
-              variant="outlined"
+              multiline
+              rows={4}
+              variant="standard"
+              fullWidth
               value={formik.values.description}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -104,8 +129,14 @@ const AddTodo: React.FC<AddTodoProps> = (props) => {
                   );
                 }}
                 sx={{ width: "100%", mt: 1 }}
+                slotProps={{
+                  textField: {
+                    variant: "standard",
+                  },
+                }}
               />
             </LocalizationProvider>
+
             <SubmitButton name="add" handleClose={handleClose} />
           </form>
         </DialogContent>
