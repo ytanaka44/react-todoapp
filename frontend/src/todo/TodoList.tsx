@@ -111,7 +111,7 @@ const TodoList: React.FC<TodoListProps> = (props) => {
             ))}
         </Box>
       </Box>
-      <AddTodo fetchTodos={props.fetchTodos} />
+      <AddTodo todos={props.todos} setTodos={props.setTodos} />
     </Box>
   );
 };
