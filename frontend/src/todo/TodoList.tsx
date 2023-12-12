@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Typography,
-} from "@mui/material";
+import { Box, Checkbox, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
@@ -14,34 +6,42 @@ import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import StarIcon from "@mui/icons-material/Star";
 import { getAllTodos, updateTodo } from "./api/api";
 import { TodoState } from "./types/types";
-import AddIcon from "@mui/icons-material/Add";
 import AddTodo from "./AddTodo";
+import useModalRoute from "./hooks/useModalRoute";
+import { useTodos } from "./hooks/useTodos";
+import { useNavigate } from "react-router-dom";
 
-const TodoList: React.FC = () => {
-  const [datas, setDatas] = useState<TodoState[]>([]);
+interface TodoListProps {
+  todos: TodoState[];
+  setTodos: React.Dispatch<React.SetStateAction<TodoState[]>>;
+  fetchTodos: () => void;
+}
 
-  const fetchTodos = async () => {
-    const todos = await getAllTodos();
-    setDatas(todos);
+const TodoList: React.FC<TodoListProps> = (props) => {
+  const { editModalPath } = useModalRoute();
+
+  // const fetchTodos = async () => {
+  //   const todos = await getAllTodos();
+  //   setDatas(todos);
+  // };
+
+  const handleCheckDone = async (todo: TodoState) => {
+    const updateData = { ...todo, done: !todo.done };
+    await updateTodo(todo.id, updateData);
+
+    props.setTodos(props.todos.map((t) => (t.id === todo.id ? updateData : t)));
   };
 
-  const handleCheckDone = async (data: TodoState) => {
-    const updateData = { ...data, done: !data.done };
-    await updateTodo(data.id, updateData);
+  const handleCheckImportant = async (todo: TodoState) => {
+    const updateData = { ...todo, important: !todo.important };
+    await updateTodo(todo.id, updateData);
 
-    fetchTodos();
+    props.setTodos(props.todos.map((t) => (t.id === todo.id ? updateData : t)));
   };
 
-  const handleCheckImportant = async (data: TodoState) => {
-    const updateData = { ...data, important: !data.important };
-    await updateTodo(data.id, updateData);
-
-    fetchTodos();
+  const handleEdit = (todo: TodoState) => {
+    editModalPath(`/todos/${todo.id}`, todo.id);
   };
-
-  useEffect(() => {
-    fetchTodos();
-  }, []);
 
   return (
     <Box
@@ -58,10 +58,14 @@ const TodoList: React.FC = () => {
           Tasks
         </Typography>
         <Box sx={{ overflowY: "auto", maxHeight: "75vh" }}>
-          {datas
-            .filter((data) => !data.done)
-            .map((data, index) => (
-              <Box key={data.id} sx={{ backgroundColor: "lightgray", mb: 1 }}>
+          {props.todos
+            .filter((todo) => !todo.done)
+            .map((todo, index) => (
+              <Box
+                key={todo.id}
+                sx={{ backgroundColor: "lightgray", mb: 1, cursor: "pointer" }}
+                onClick={() => handleEdit(todo)}
+              >
                 <Box
                   key={index}
                   sx={{
@@ -75,8 +79,11 @@ const TodoList: React.FC = () => {
                     <Checkbox
                       icon={<CircleOutlinedIcon />}
                       checkedIcon={<CheckCircleOutlinedIcon />}
-                      checked={data.done}
-                      onChange={() => handleCheckDone(data)}
+                      checked={todo.done}
+                      onChange={() => handleCheckDone(todo)}
+                      onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                        e.stopPropagation()
+                      }
                     />
                     <Box
                       sx={{
@@ -86,22 +93,25 @@ const TodoList: React.FC = () => {
                         alignItems: "flex-start",
                       }}
                     >
-                      <Box>{data.title}</Box>
-                      <Box>{data.date}</Box>
+                      <Box>{todo.title}</Box>
+                      <Box>{todo.date}</Box>
                     </Box>
                   </Box>
                   <Checkbox
                     icon={<StarBorderOutlinedIcon />}
                     checkedIcon={<StarIcon />}
-                    checked={data.important}
-                    onChange={() => handleCheckImportant(data)}
+                    checked={todo.important}
+                    onChange={() => handleCheckImportant(todo)}
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                      e.stopPropagation()
+                    }
                   />
                 </Box>
               </Box>
             ))}
         </Box>
       </Box>
-      <AddTodo fetchTodos={fetchTodos} />
+      <AddTodo fetchTodos={props.fetchTodos} />
     </Box>
   );
 };
