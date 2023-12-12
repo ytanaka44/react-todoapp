@@ -9,8 +9,9 @@ import CustomTextField from "../components/CustomTextField";
 import SubmitButton from "../components/SubmitButton";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { fetchAddTodo } from "./api/api";
+import { addTodo } from "./api/api";
 import { format } from "date-fns";
+import dayjs from "dayjs";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
@@ -36,7 +37,7 @@ const AddTodo: React.FC<AddTodoProps> = (props) => {
     initialValues: {
       id: uuidv4(),
       title: "",
-      detail: "",
+      description: "",
       done: false,
       important: false,
       date: "",
@@ -48,7 +49,7 @@ const AddTodo: React.FC<AddTodoProps> = (props) => {
         ...state,
         createdAt: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
       };
-      await fetchAddTodo(todo);
+      await addTodo(todo);
       await props.fetchTodos();
     },
   });
@@ -84,11 +85,11 @@ const AddTodo: React.FC<AddTodoProps> = (props) => {
               helperText={(formik.touched.title && formik.errors.title) || ""}
             />
             <CustomTextField
-              id="detail"
-              name="detail"
-              label="detail"
+              id="description"
+              name="description"
+              label="description"
               variant="outlined"
-              value={formik.values.detail}
+              value={formik.values.description}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
@@ -97,7 +98,10 @@ const AddTodo: React.FC<AddTodoProps> = (props) => {
                 label="Deadline"
                 value={null}
                 onChange={(date) => {
-                  formik.setFieldValue("date", date);
+                  formik.setFieldValue(
+                    "date",
+                    dayjs(date).format("YYYY-MM-DD")
+                  );
                 }}
                 sx={{ width: "100%", mt: 1 }}
               />
