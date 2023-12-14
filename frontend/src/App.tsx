@@ -30,6 +30,40 @@ function App() {
                 todos={todos}
                 setTodos={setTodos}
                 fetchTodos={fetchTodos}
+                filterFunction={(todo) => !todo.done}
+              />
+            }
+          />
+          <Route
+            path="/important"
+            element={
+              <TodoList
+                todos={todos}
+                setTodos={setTodos}
+                fetchTodos={fetchTodos}
+                filterFunction={(todo) => todo.important}
+              />
+            }
+          />
+          <Route
+            path="/all"
+            element={
+              <TodoList
+                todos={todos}
+                setTodos={setTodos}
+                fetchTodos={fetchTodos}
+                filterFunction={() => true}
+              />
+            }
+          />
+          <Route
+            path="/complited"
+            element={
+              <TodoList
+                todos={todos}
+                setTodos={setTodos}
+                fetchTodos={fetchTodos}
+                filterFunction={(todo) => todo.done}
               />
             }
           />
@@ -40,6 +74,7 @@ function App() {
                 todos={todos}
                 setTodos={setTodos}
                 fetchTodos={fetchTodos}
+                filterFunction={(todo) => !todo.done}
               />
             }
           />
