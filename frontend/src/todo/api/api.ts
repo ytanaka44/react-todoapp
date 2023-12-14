@@ -7,6 +7,12 @@ export const getAllTodos = async (): Promise<TodoState[]> => {
   return todos;
 };
 
+export const getTodoById = async (id: string): Promise<TodoState> => {
+  const res = await fetch(`http://localhost:3001/todo/${id}`);
+  const todo = await res.json();
+  return todo;
+};
+
 export const addTodo = async (todo: TodoState): Promise<TodoState> => {
   const res = await fetch(`http://localhost:3001/todo`, {
     method: "post",

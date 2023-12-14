@@ -12,7 +12,6 @@ import AppLayout from "./components/AppLayout";
 import TodoEdit from "./todo/TodoEdit";
 import { BackgroundLocation } from "./todo/hooks/useModalRoute";
 import { useTodos } from "./todo/hooks/useTodos";
-import { TodoState } from "./todo/types/types";
 
 function App() {
   const location = useLocation();
@@ -26,6 +25,16 @@ function App() {
         <Route path="/" element={<AppLayout />}>
           <Route
             index
+            element={
+              <TodoList
+                todos={todos}
+                setTodos={setTodos}
+                fetchTodos={fetchTodos}
+              />
+            }
+          />
+          <Route
+            path="/todos/:id"
             element={
               <TodoList
                 todos={todos}
