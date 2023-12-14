@@ -16,6 +16,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import { Link, useNavigate } from "react-router-dom";
 
 interface SidebarProps {
   /**
@@ -27,37 +28,38 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = (props) => {
   const { window } = props;
+  const navigate = useNavigate();
   const listItems = [
     {
       text: "Todos",
       icon: <FormatListBulletedIcon />,
-      onClick: () => handleItemClick("Inbox"),
+      to: "/",
     },
     {
       text: "Important",
       icon: <StarIcon />,
-      onClick: () => handleItemClick("Starred"),
+      to: "/important",
     },
     {
       text: "Planned",
       icon: <CalendarMonthIcon />,
-      onClick: () => handleItemClick("Send email"),
+      to: "planned",
     },
     {
       text: "All",
       icon: <AllInclusiveIcon />,
-      onClick: () => handleItemClick("Drafts"),
+      to: "/all",
     },
     {
       text: "Complited",
       icon: <TaskAltIcon />,
-      onClick: () => handleItemClick("Drafts"),
+      to: "complited",
     },
   ];
 
   // 例えば、クリックイベントに対する処理
-  const handleItemClick = (text: string) => {
-    console.log(`${text} clicked`);
+  const handleItemClick = (to: string) => {
+    navigate(to);
   };
 
   return (
@@ -74,9 +76,9 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
       </Toolbar>
       <Divider />
       <List>
-        {listItems.map((item) => (
+        {listItems.map((item, index) => (
           <ListItem key={item.text} disablePadding>
-            <ListItemButton onClick={item.onClick}>
+            <ListItemButton onClick={() => handleItemClick(item.to)}>
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItemButton>
