@@ -12,12 +12,12 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TodoState } from "./types/types";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
-import { deleteTodo, updateTodo } from "./api/api";
+import { deleteTodo, getAllTodos, getTodoById, updateTodo } from "./api/api";
 import CloseIcon from "@mui/icons-material/Close";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import * as Yup from "yup";
@@ -28,6 +28,7 @@ import SubmitButton from "../components/SubmitButton";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import { useTodos } from "./hooks/useTodos";
 
 interface TodoEditProps {
   todos: TodoState[];
@@ -35,10 +36,9 @@ interface TodoEditProps {
 }
 
 const TodoEdit: React.FC<TodoEditProps> = (props) => {
-  const location = useLocation();
-  const id = location.state?.id;
+  const { id } = useParams<string>();
+  const [todo, setTodo] = useState<TodoState>();
   const navigate = useNavigate();
-  const todo = props.todos.find((todo) => todo.id === id) as TodoState;
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
@@ -63,19 +63,41 @@ const TodoEdit: React.FC<TodoEditProps> = (props) => {
   };
 
   const handleCheckImportant = async (todo: TodoState) => {
-    const updateData = { ...todo, important: !todo.important };
-    await updateTodo(todo.id, updateData);
-    props.setTodos(props.todos.map((t) => (t.id === todo.id ? updateData : t)));
+    const editTodo = props.todos.find(
+      (currentTodo) => currentTodo.id === todo.id
+    );
+    if (editTodo) {
+      const updateData = { ...editTodo, important: !editTodo.important };
+      await updateTodo(todo.id, updateData);
+      props.setTodos(
+        props.todos.map((currentTodo) =>
+          currentTodo.id === todo.id ? updateData : currentTodo
+        )
+      );
+      setTodo(updateData);
+    }
   };
 
   const handleCheckDone = async (todo: TodoState) => {
-    const updateData = { ...todo, done: !todo.done };
-    await updateTodo(todo.id, updateData);
-    props.setTodos(props.todos.map((t) => (t.id === todo.id ? updateData : t)));
+    const editTodo = props.todos.find(
+      (currentTodo) => currentTodo.id === todo.id
+    );
+    if (editTodo) {
+      const updateData = { ...editTodo, done: !editTodo.done };
+      await updateTodo(todo.id, updateData);
+      props.setTodos(
+        props.todos.map((currentTodo) =>
+          currentTodo.id === todo.id ? updateData : currentTodo
+        )
+      );
+      setTodo(updateData);
+    }
   };
 
   const handleDeleteTodo = async (todo: TodoState) => {
-    const newTodos = props.todos.filter((t) => todo.id !== t.id);
+    const newTodos = props.todos.filter(
+      (currentTodo) => todo.id !== currentTodo.id
+    );
     await deleteTodo(todo.id);
     props.setTodos(newTodos);
     setActionOpen(false);
@@ -83,31 +105,48 @@ const TodoEdit: React.FC<TodoEditProps> = (props) => {
   };
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      id: todo.id,
-      title: todo.title,
-      description: todo.description,
-      done: todo.done,
-      important: todo.important,
-      date: todo.date,
-      createdAt: todo.createdAt,
+      id: todo?.id || "",
+      title: todo?.title || "",
+      description: todo?.description || "",
+      done: todo?.done || false,
+      important: todo?.important || false,
+      date: todo?.date || "",
+      createdAt: todo?.createdAt || "",
     },
     validationSchema,
     onSubmit: async (state) => {
-      // 最新のtodoを取得
-      const todo = props.todos.find((todo) => todo.id === id) as TodoState;
-      const updateData = {
-        ...todo,
-        title: state.title,
-        description: state.description,
-        date: state.date,
-      };
-      await updateTodo(id, updateData);
-      props.setTodos(
-        props.todos.map((t) => (t.id === todo.id ? updateData : t))
-      );
+      if (todo) {
+        const updateData = {
+          ...todo,
+          title: state.title,
+          description: state.description,
+          date: state.date,
+        };
+        await updateTodo(todo.id, updateData);
+        props.setTodos(
+          props.todos.map((currentTodo) =>
+            currentTodo.id === todo.id ? updateData : currentTodo
+          )
+        );
+      }
     },
   });
+
+  useEffect(() => {
+    if (id) {
+      const fetchTodo = async () => {
+        const fetchedTodo = await getTodoById(id);
+        setTodo(fetchedTodo);
+      };
+      fetchTodo();
+    }
+  }, [id]);
+
+  if (!todo) {
+    return <Box />;
+  }
 
   return (
     <Dialog
