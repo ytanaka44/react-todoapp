@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Checkbox,
   Dialog,
@@ -7,6 +8,7 @@ import {
   Divider,
   IconButton,
   Popover,
+  Snackbar,
   Stack,
   TextField,
   Typography,
@@ -48,9 +50,11 @@ const TodoEdit: React.FC<TodoEditProps> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+  const [snacBarOpen, setSnackBarOpen] = useState(false);
 
   const handleClose = () => {
     navigate("/");
+    handleSnackBarClose();
   };
 
   const handleActionOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -60,6 +64,10 @@ const TodoEdit: React.FC<TodoEditProps> = (props) => {
 
   const handleActionClose = () => {
     setActionOpen(false);
+  };
+
+  const handleSnackBarClose = () => {
+    setSnackBarOpen(false);
   };
 
   const handleCheckImportant = async (todo: TodoState) => {
@@ -130,6 +138,7 @@ const TodoEdit: React.FC<TodoEditProps> = (props) => {
             currentTodo.id === todo.id ? updateData : currentTodo
           )
         );
+        setSnackBarOpen(true);
       }
     },
   });
@@ -282,6 +291,15 @@ const TodoEdit: React.FC<TodoEditProps> = (props) => {
           </Box>
           <SubmitButton name="update" handleClose={handleClose} />
         </form>
+        <Snackbar
+          open={snacBarOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackBarClose}
+        >
+          <Alert onClose={handleSnackBarClose} severity={"success"}>
+            Update task
+          </Alert>
+        </Snackbar>
       </DialogContent>
     </Dialog>
   );
