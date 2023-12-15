@@ -68,7 +68,10 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
       sx={{
         width: { sm: "360px" },
         height: "100vh",
-        backgroundColor: "lightgray",
+        borderRight: 1, // 1ピクセルの右境界線を追加
+        borderColor: "divider", // デフォルトの境界線色を使用
+        bgcolor: "secondary.main",
+        color: "secondary.contrastText",
       }}
     >
       <Toolbar variant="regular" sx={{ fontSize: "22px" }}>
