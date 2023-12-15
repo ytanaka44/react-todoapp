@@ -56,7 +56,12 @@ const TodoList: React.FC<TodoListProps> = (props) => {
           {fileteredTodos.map((todo, index) => (
             <Box
               key={todo.id}
-              sx={{ backgroundColor: "lightgray", mb: 1, cursor: "pointer" }}
+              sx={{
+                mb: 1,
+                cursor: "pointer",
+                bgcolor: "secondary.main",
+                color: "secondary.contrastText",
+              }}
               onClick={() => handleEdit(todo)}
             >
               <Box
