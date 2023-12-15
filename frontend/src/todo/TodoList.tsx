@@ -61,6 +61,9 @@ const TodoList: React.FC<TodoListProps> = (props) => {
                 cursor: "pointer",
                 bgcolor: "secondary.main",
                 color: "secondary.contrastText",
+                "&:hover": {
+                  bgcolor: "secondary.light",
+                },
               }}
               onClick={() => handleEdit(todo)}
             >
