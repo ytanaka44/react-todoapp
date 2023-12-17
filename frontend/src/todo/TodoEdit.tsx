@@ -41,6 +41,8 @@ const TodoEdit: React.FC<TodoEditProps> = (props) => {
   const { id } = useParams<string>();
   const [todo, setTodo] = useState<TodoState>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const pathname = location.state.pathname;
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
@@ -53,7 +55,7 @@ const TodoEdit: React.FC<TodoEditProps> = (props) => {
   const [snacBarOpen, setSnackBarOpen] = useState(false);
 
   const handleClose = () => {
-    navigate("/");
+    navigate(pathname);
     handleSnackBarClose();
   };
 
@@ -109,7 +111,7 @@ const TodoEdit: React.FC<TodoEditProps> = (props) => {
     await deleteTodo(todo.id);
     props.setTodos(newTodos);
     setActionOpen(false);
-    navigate("/");
+    navigate(pathname);
   };
 
   const formik = useFormik({

@@ -1,15 +1,6 @@
 {
   "todo": [
     {
-      "id": "f6b999d3-515b-4579-8d8b-44a28d2549c8",
-      "title": "date test change",
-      "description": "",
-      "done": false,
-      "important": false,
-      "date": "2023-12-15",
-      "createdAt": "2023-12-13 04:36:48"
-    },
-    {
       "id": "0e93642f-4b64-4053-a539-0b20af14abfa",
       "title": "important",
       "description": "important test",
