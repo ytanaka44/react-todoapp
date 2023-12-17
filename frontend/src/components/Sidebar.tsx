@@ -17,6 +17,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import { Link, useNavigate } from "react-router-dom";
+import Signout from "../auth/Signout";
 
 interface SidebarProps {
   /**
@@ -66,29 +67,37 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
     <Box
       component="nav"
       sx={{
-        width: { sm: "360px" },
+        width: { sm: "280px" },
         height: "100vh",
         borderRight: 1, // 1ピクセルの右境界線を追加
         borderColor: "divider", // デフォルトの境界線色を使用
         bgcolor: "secondary.main",
         color: "secondary.contrastText",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
       }}
     >
-      <Toolbar variant="regular" sx={{ fontSize: "22px" }}>
-        ToDo App
-      </Toolbar>
-      <Divider />
-      <List>
-        {listItems.map((item, index) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton onClick={() => handleItemClick(item.to)}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
+      <Box>
+        <Toolbar variant="regular" sx={{ fontSize: "22px" }}>
+          ToDo App
+        </Toolbar>
+        <Divider />
+        <List>
+          {listItems.map((item, index) => (
+            <ListItem key={item.text} disablePadding>
+              <ListItemButton onClick={() => handleItemClick(item.to)}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+      </Box>
+      <Box sx={{ pb: 2 }}>
+        <Signout />
+      </Box>
     </Box>
   );
 };

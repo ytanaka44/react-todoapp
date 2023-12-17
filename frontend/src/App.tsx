@@ -1,11 +1,5 @@
-import React from "react";
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-} from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import TodoList from "./todo/TodoList";
 import AppLayout from "./components/AppLayout";
@@ -14,13 +8,14 @@ import { BackgroundLocation } from "./todo/hooks/useModalRoute";
 import { useTodos } from "./todo/hooks/useTodos";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "./theme";
+import Signup from "./auth/Signup";
+import Signin from "./auth/Signin";
+import { PrivateRoute } from "./auth/PrivateRoute";
 
 function App() {
   const location = useLocation();
   const background = (location.state as BackgroundLocation)?.background;
-
   const { todos, setTodos, fetchTodos } = useTodos();
-
   const theme = createTheme();
 
   return (
@@ -28,7 +23,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Routes location={background || location}>
-          <Route path="/" element={<AppLayout />}>
+          <Route path="/" element={<PrivateRoute element={<AppLayout />} />}>
             <Route
               index
               element={
@@ -85,6 +80,8 @@ function App() {
               }
             />
           </Route>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={<Signin />} />
         </Routes>
         {background && (
           <Routes>

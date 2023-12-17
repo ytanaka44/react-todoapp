@@ -42,7 +42,7 @@ const TodoList: React.FC<TodoListProps> = (props) => {
     <Box
       sx={{
         p: 3,
-        width: "100%",
+        flexGrow: 1,
         justifyContent: "space-between",
         display: "flex",
         flexDirection: "column",

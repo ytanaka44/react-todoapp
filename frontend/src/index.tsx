@@ -5,17 +5,20 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { RecoilRoot } from "recoil";
 import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./auth/AuthContext";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <RecoilRoot>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </RecoilRoot>
+    <AuthProvider>
+      <RecoilRoot>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </RecoilRoot>
+    </AuthProvider>
   </React.StrictMode>
 );
 
