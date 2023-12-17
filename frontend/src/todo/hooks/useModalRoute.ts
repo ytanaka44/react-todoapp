@@ -17,10 +17,10 @@ const useModalRoute = () => {
     backgroundLocationState
   );
 
-  const editModalPath = (to: string, id: string) => {
+  const editModalPath = (to: string, id: string, pathname: string) => {
     setBackgroundLocation({ background: location });
     navigate(to, {
-      state: { background: location, id: id },
+      state: { background: location, id: id, pathname: pathname },
     });
   };
 

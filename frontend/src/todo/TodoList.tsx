@@ -8,6 +8,7 @@ import { updateTodo } from "./api/api";
 import { TodoState } from "./types/types";
 import AddTodo from "./AddTodo";
 import useModalRoute from "./hooks/useModalRoute";
+import { useLocation } from "react-router-dom";
 
 interface TodoListProps {
   todos: TodoState[];
@@ -19,6 +20,7 @@ interface TodoListProps {
 const TodoList: React.FC<TodoListProps> = (props) => {
   const { editModalPath } = useModalRoute();
   const fileteredTodos = props.todos.filter(props.filterFunction);
+  const location = useLocation();
 
   const handleCheckDone = async (todo: TodoState) => {
     const updateData = { ...todo, done: !todo.done };
@@ -35,7 +37,8 @@ const TodoList: React.FC<TodoListProps> = (props) => {
   };
 
   const handleEdit = (todo: TodoState) => {
-    editModalPath(`/todos/${todo.id}`, todo.id);
+    const pathname = location.pathname;
+    editModalPath(`/todos/${todo.id}`, todo.id, pathname);
   };
 
   return (
