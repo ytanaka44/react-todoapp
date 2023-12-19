@@ -21,6 +21,7 @@ import { format } from "date-fns";
 import dayjs from "dayjs";
 import CloseIcon from "@mui/icons-material/Close";
 import { TodoState } from "./types/types";
+import { useAuthContext } from "../auth/AuthContext";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
@@ -32,6 +33,7 @@ interface AddTodoProps {
 }
 
 const AddTodo: React.FC<AddTodoProps> = (props) => {
+  const { user } = useAuthContext();
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
@@ -45,7 +47,6 @@ const AddTodo: React.FC<AddTodoProps> = (props) => {
 
   const formik = useFormik({
     initialValues: {
-      id: "",
       title: "",
       description: "",
       done: false,
@@ -55,15 +56,16 @@ const AddTodo: React.FC<AddTodoProps> = (props) => {
     },
     validationSchema,
     onSubmit: async (state) => {
-      const newId = uuidv4();
       const todo = {
         ...state,
-        id: newId,
+        // id: newId,
         createdAt: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
       };
-      await addTodo(todo);
-      props.setTodos([...props.todos, todo]);
-      handleClose();
+      if (user) {
+        const newTodo = await addTodo(todo, user.uid);
+        props.setTodos([...props.todos, newTodo]);
+        handleClose();
+      }
     },
   });
 

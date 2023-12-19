@@ -9,6 +9,7 @@ import { TodoState } from "./types/types";
 import AddTodo from "./AddTodo";
 import useModalRoute from "./hooks/useModalRoute";
 import { useLocation } from "react-router-dom";
+import { useAuthContext } from "../auth/AuthContext";
 
 interface TodoListProps {
   todos: TodoState[];
@@ -21,17 +22,22 @@ const TodoList: React.FC<TodoListProps> = (props) => {
   const { editModalPath } = useModalRoute();
   const fileteredTodos = props.todos.filter(props.filterFunction);
   const location = useLocation();
+  const { user } = useAuthContext();
 
   const handleCheckDone = async (todo: TodoState) => {
     const updateData = { ...todo, done: !todo.done };
-    await updateTodo(todo.id, updateData);
+    if (user) {
+      await updateTodo(todo.id, updateData, user.uid);
+    }
 
     props.setTodos(props.todos.map((t) => (t.id === todo.id ? updateData : t)));
   };
 
   const handleCheckImportant = async (todo: TodoState) => {
     const updateData = { ...todo, important: !todo.important };
-    await updateTodo(todo.id, updateData);
+    if (user) {
+      await updateTodo(todo.id, updateData, user.uid);
+    }
 
     props.setTodos(props.todos.map((t) => (t.id === todo.id ? updateData : t)));
   };

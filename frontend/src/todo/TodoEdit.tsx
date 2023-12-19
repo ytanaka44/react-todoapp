@@ -30,7 +30,7 @@ import SubmitButton from "../components/SubmitButton";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { useTodos } from "./hooks/useTodos";
+import { useAuthContext } from "../auth/AuthContext";
 
 interface TodoEditProps {
   todos: TodoState[];
@@ -43,6 +43,7 @@ const TodoEdit: React.FC<TodoEditProps> = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.state.pathname;
+  const { user } = useAuthContext();
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
@@ -76,9 +77,9 @@ const TodoEdit: React.FC<TodoEditProps> = (props) => {
     const editTodo = props.todos.find(
       (currentTodo) => currentTodo.id === todo.id
     );
-    if (editTodo) {
+    if (editTodo && user) {
       const updateData = { ...editTodo, important: !editTodo.important };
-      await updateTodo(todo.id, updateData);
+      await updateTodo(todo.id, updateData, user.uid);
       props.setTodos(
         props.todos.map((currentTodo) =>
           currentTodo.id === todo.id ? updateData : currentTodo
@@ -92,9 +93,9 @@ const TodoEdit: React.FC<TodoEditProps> = (props) => {
     const editTodo = props.todos.find(
       (currentTodo) => currentTodo.id === todo.id
     );
-    if (editTodo) {
+    if (editTodo && user) {
       const updateData = { ...editTodo, done: !editTodo.done };
-      await updateTodo(todo.id, updateData);
+      await updateTodo(todo.id, updateData, user.uid);
       props.setTodos(
         props.todos.map((currentTodo) =>
           currentTodo.id === todo.id ? updateData : currentTodo
@@ -108,10 +109,12 @@ const TodoEdit: React.FC<TodoEditProps> = (props) => {
     const newTodos = props.todos.filter(
       (currentTodo) => todo.id !== currentTodo.id
     );
-    await deleteTodo(todo.id);
-    props.setTodos(newTodos);
-    setActionOpen(false);
-    navigate(pathname);
+    if (user) {
+      await deleteTodo(todo.id, user.uid);
+      props.setTodos(newTodos);
+      setActionOpen(false);
+      navigate(pathname);
+    }
   };
 
   const formik = useFormik({
@@ -134,21 +137,23 @@ const TodoEdit: React.FC<TodoEditProps> = (props) => {
           description: state.description,
           date: state.date,
         };
-        await updateTodo(todo.id, updateData);
-        props.setTodos(
-          props.todos.map((currentTodo) =>
-            currentTodo.id === todo.id ? updateData : currentTodo
-          )
-        );
-        setSnackBarOpen(true);
+        if (user) {
+          await updateTodo(todo.id, updateData, user.uid);
+          props.setTodos(
+            props.todos.map((currentTodo) =>
+              currentTodo.id === todo.id ? updateData : currentTodo
+            )
+          );
+          setSnackBarOpen(true);
+        }
       }
     },
   });
 
   useEffect(() => {
-    if (id) {
+    if (id && user) {
       const fetchTodo = async () => {
-        const fetchedTodo = await getTodoById(id);
+        const fetchedTodo = await getTodoById(user.uid, id);
         setTodo(fetchedTodo);
       };
       fetchTodo();
