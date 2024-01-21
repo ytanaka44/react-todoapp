@@ -4,7 +4,7 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  TextField,
+  Stack,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
@@ -12,7 +12,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import CustomTextField from "../components/CustomTextField";
+import { FormikTextField } from "../components/FormikTextField";
 import SubmitButton from "../components/SubmitButton";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -98,47 +98,38 @@ const AddTodo: React.FC<AddTodoProps> = (props) => {
         </IconButton>
         <DialogContent>
           <form noValidate onSubmit={formik.handleSubmit}>
-            <CustomTextField
-              id="title"
-              name="title"
-              label="title*"
-              variant="standard"
-              value={formik.values.title}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={!!(formik.touched.title && formik.errors.title)}
-              helperText={(formik.touched.title && formik.errors.title) || ""}
-            />
-            <TextField
-              id="description"
-              label="description"
-              multiline
-              rows={4}
-              variant="standard"
-              fullWidth
-              value={formik.values.description}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="Deadline"
-                value={null}
-                onChange={(date) => {
-                  formik.setFieldValue(
-                    "date",
-                    dayjs(date).format("YYYY-MM-DD")
-                  );
-                }}
-                sx={{ width: "100%", mt: 1 }}
-                slotProps={{
-                  textField: {
-                    variant: "standard",
-                  },
-                }}
+            <Stack spacing={2}>
+              <FormikTextField
+                name="title"
+                label="Title"
+                formik={formik}
+                variant="standard"
               />
-            </LocalizationProvider>
-
+              <FormikTextField
+                name="description"
+                label="Description"
+                formik={formik}
+                variant="standard"
+              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Deadline"
+                  value={null}
+                  onChange={(date) => {
+                    formik.setFieldValue(
+                      "date",
+                      dayjs(date).format("YYYY-MM-DD")
+                    );
+                  }}
+                  sx={{ width: "100%", mt: 1 }}
+                  slotProps={{
+                    textField: {
+                      variant: "standard",
+                    },
+                  }}
+                />
+              </LocalizationProvider>
+            </Stack>
             <SubmitButton name="add" handleClose={handleClose} />
           </form>
         </DialogContent>

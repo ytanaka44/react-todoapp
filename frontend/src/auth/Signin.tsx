@@ -5,19 +5,19 @@ import {
   Grid,
   Paper,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import * as Yup from "yup";
-import CustomTextField from "../components/CustomTextField";
+
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "./AuthContext";
 import Loading from "../components/Loading";
+import { FormikTextField } from "../components/FormikTextField";
 
 const Signin: React.FC = () => {
   const { user, isLoading } = useAuthContext();
@@ -73,32 +73,18 @@ const Signin: React.FC = () => {
         <Typography>Signin</Typography>
         <form noValidate onSubmit={formik.handleSubmit}>
           <Stack spacing={2}>
-            <TextField
-              id="email"
+            <FormikTextField
               name="email"
               label="Email *"
               variant="standard"
-              fullWidth
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={!!(formik.touched.email && formik.errors.email)}
-              helperText={(formik.touched.email && formik.errors.email) || ""}
+              formik={formik}
             />
-            <TextField
-              id="password"
+            <FormikTextField
               name="password"
               label="Password *"
               variant="standard"
-              fullWidth
               type="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={!!(formik.touched.password && formik.errors.password)}
-              helperText={
-                (formik.touched.password && formik.errors.password) || ""
-              }
+              formik={formik}
             />
             <Button fullWidth variant="contained" type="submit">
               Login
