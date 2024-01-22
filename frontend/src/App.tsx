@@ -2,7 +2,7 @@ import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 import TodoList from "./todo/TodoList";
-import AppLayout from "./components/AppLayout";
+import AppLayout from "./layout/AppLayout";
 import TodoEdit from "./todo/TodoEdit";
 import { BackgroundLocation } from "./todo/hooks/useModalRoute";
 import { useTodos } from "./todo/hooks/useTodos";
