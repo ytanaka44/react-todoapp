@@ -42,11 +42,6 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
       to: "/important",
     },
     {
-      text: "Planned",
-      icon: <CalendarMonthIcon />,
-      to: "planned",
-    },
-    {
       text: "All",
       icon: <AllInclusiveIcon />,
       to: "/all",
