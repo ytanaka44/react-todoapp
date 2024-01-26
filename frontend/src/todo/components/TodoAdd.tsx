@@ -12,15 +12,15 @@ import AddIcon from "@mui/icons-material/Add";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import { FormikTextField } from "../components/FormikTextField";
-import SubmitButton from "../components/SubmitButton";
+import { FormikTextField } from "../../components/FormikTextField";
+import SubmitButton from "../../components/SubmitButton";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { addTodo } from "./api/api";
+import { addTodo } from "../api/api";
 import { format } from "date-fns";
 import dayjs from "dayjs";
 import CloseIcon from "@mui/icons-material/Close";
-import { TodoState } from "./types/types";
+import { TodoState } from "../types";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),

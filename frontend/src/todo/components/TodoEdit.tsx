@@ -15,22 +15,21 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
-import { TodoState } from "./types/types";
+import { TodoState } from "../types";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
-import { deleteTodo, getAllTodos, getTodoById, updateTodo } from "./api/api";
+import { deleteTodo, getAllTodos, getTodoById, updateTodo } from "../api/api";
 import CloseIcon from "@mui/icons-material/Close";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import * as Yup from "yup";
 import DeleteIcon from "@mui/icons-material/Delete";
 import StarIcon from "@mui/icons-material/Star";
 import { useFormik } from "formik";
-import SubmitButton from "../components/SubmitButton";
+import SubmitButton from "../../components/SubmitButton";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { useTodos } from "./hooks/useTodos";
 
 interface TodoEditProps {
   todos: TodoState[];

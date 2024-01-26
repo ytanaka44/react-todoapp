@@ -5,8 +5,8 @@ import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import StarIcon from "@mui/icons-material/Star";
 import { updateTodo } from "./api/api";
-import { TodoState } from "./types/types";
-import AddTodo from "./TodoAdd";
+import { TodoState } from "./types";
+import AddTodo from "./components/TodoAdd";
 import useModalRoute from "./hooks/useModalRoute";
 import { useLocation } from "react-router-dom";
 

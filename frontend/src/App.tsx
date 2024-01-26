@@ -3,7 +3,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 
 import TodoList from "./todo/TodoList";
 import AppLayout from "./layout/AppLayout";
-import TodoEdit from "./todo/TodoEdit";
+import TodoEdit from "./todo/components/TodoEdit";
 import { BackgroundLocation } from "./todo/hooks/useModalRoute";
 import { useTodos } from "./todo/hooks/useTodos";
 import { CssBaseline, ThemeProvider } from "@mui/material";

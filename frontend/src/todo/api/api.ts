@@ -1,5 +1,5 @@
 import React from "react";
-import { TodoState } from "../types/types";
+import { TodoState } from "../types";
 
 export const getAllTodos = async (): Promise<TodoState[]> => {
   const res = await fetch(`http://localhost:3001/todo`);
