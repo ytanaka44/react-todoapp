@@ -13,7 +13,6 @@ import { useLocation } from "react-router-dom";
 interface TodoListProps {
   todos: TodoState[];
   setTodos: React.Dispatch<React.SetStateAction<TodoState[]>>;
-  fetchTodos: () => void;
   filterFunction: (todo: TodoState) => boolean;
 }
 

@@ -15,7 +15,7 @@ import { PrivateRoute } from "./auth/PrivateRoute";
 function App() {
   const location = useLocation();
   const background = (location.state as BackgroundLocation)?.background;
-  const { todos, setTodos, fetchTodos } = useTodos();
+  const { todos, setTodos } = useTodos();
   const theme = createTheme();
 
   return (
@@ -30,7 +30,6 @@ function App() {
                 <TodoList
                   todos={todos}
                   setTodos={setTodos}
-                  fetchTodos={fetchTodos}
                   filterFunction={(todo) => !todo.done}
                 />
               }
@@ -41,7 +40,6 @@ function App() {
                 <TodoList
                   todos={todos}
                   setTodos={setTodos}
-                  fetchTodos={fetchTodos}
                   filterFunction={(todo) => todo.important}
                 />
               }
@@ -52,7 +50,6 @@ function App() {
                 <TodoList
                   todos={todos}
                   setTodos={setTodos}
-                  fetchTodos={fetchTodos}
                   filterFunction={() => true}
                 />
               }
@@ -63,7 +60,6 @@ function App() {
                 <TodoList
                   todos={todos}
                   setTodos={setTodos}
-                  fetchTodos={fetchTodos}
                   filterFunction={(todo) => todo.done}
                 />
               }
@@ -74,7 +70,6 @@ function App() {
                 <TodoList
                   todos={todos}
                   setTodos={setTodos}
-                  fetchTodos={fetchTodos}
                   filterFunction={(todo) => !todo.done}
                 />
               }

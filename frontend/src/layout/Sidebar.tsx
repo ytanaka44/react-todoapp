@@ -1,7 +1,6 @@
 import {
   Box,
   Divider,
-  Drawer,
   List,
   ListItem,
   ListItemButton,
@@ -12,23 +11,12 @@ import {
 import React from "react";
 import StarIcon from "@mui/icons-material/Star";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import LightModeIcon from "@mui/icons-material/LightMode";
 import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Signout from "../auth/Signout";
 
-interface SidebarProps {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * Remove this when copying and pasting into your project.
-   */
-  window?: () => Window;
-}
-
-const Sidebar: React.FC<SidebarProps> = (props) => {
-  const { window } = props;
+const Sidebar: React.FC = () => {
   const navigate = useNavigate();
   const listItems = [
     {

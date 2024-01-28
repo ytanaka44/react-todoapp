@@ -1,4 +1,3 @@
-import React from "react";
 import { TodoState } from "../types";
 
 export const getAllTodos = async (): Promise<TodoState[]> => {
@@ -26,14 +25,13 @@ export const addTodo = async (todo: TodoState): Promise<TodoState> => {
 };
 
 export const updateTodo = async (id: string, todo: TodoState) => {
-  const res = await fetch(`http://localhost:3001/todo/${id}`, {
+  await fetch(`http://localhost:3001/todo/${id}`, {
     method: "put",
     headers: {
       "Content-Type": "application/json", //
     },
     body: JSON.stringify(todo),
   });
-  const newTodo = res.json();
 };
 
 export const deleteTodo = async (id: string) => {
